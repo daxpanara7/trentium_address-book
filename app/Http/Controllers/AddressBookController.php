@@ -63,8 +63,6 @@ class AddressBookController extends Controller
 
             $imageName = uniqid('profile_', true) . '.' . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-
-            Log::info("Image stored at: uploads/profiles/" . $imageName);
         }
 
         $address = AddressBook::create([
@@ -83,7 +81,9 @@ class AddressBookController extends Controller
         $this->logActivity($slug, 'insert', $address);
 
         Mail::to($request->email)->send(new AddressBookCreated($address));
-        Mail::to($request->email)->later(now()->addHour(), new PromotionalEmail($address));
+        // Mail::to($request->email)->later(now()->addHour(), new PromotionalEmail($address));
+        Mail::to($request->email)->later(now()->addSeconds(10), new PromotionalEmail($address));
+
 
         return redirect()->route('addressbook.index')->with('success', 'Address book entry created.');
     }
@@ -118,7 +118,6 @@ class AddressBookController extends Controller
 
             $entry->profile_pic = $imageName;
             $hasChanges = true;
-            Log::info("Updated image stored at: uploads/profiles/" . $imageName);
         }
 
         $fieldsToUpdate = ['first_name','last_name','email','phone','street','zip_code','city_id'];
