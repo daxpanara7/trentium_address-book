@@ -17,6 +17,7 @@
         @csrf
         @include('addressbook.form')
         <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{ route('addressbook.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection
