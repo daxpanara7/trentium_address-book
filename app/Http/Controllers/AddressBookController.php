@@ -55,7 +55,6 @@ class AddressBookController extends Controller
         if ($request->hasFile('profile_pic')) {
             $image = $request->file('profile_pic');
 
-            // Ensure directory exists
             $destinationPath = public_path('uploads/profiles');
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
@@ -81,9 +80,7 @@ class AddressBookController extends Controller
         $this->logActivity($slug, 'insert', $address);
 
         Mail::to($request->email)->send(new AddressBookCreated($address));
-        // Mail::to($request->email)->later(now()->addHour(), new PromotionalEmail($address));
-        Mail::to($request->email)->later(now()->addSeconds(10), new PromotionalEmail($address));
-
+        Mail::to($request->email)->later(now()->addHour(), new PromotionalEmail($address));
 
         return redirect()->route('addressbook.index')->with('success', 'Address book entry created.');
     }
